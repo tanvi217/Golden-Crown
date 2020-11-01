@@ -7,11 +7,11 @@ Problem statement - [Geektust - A Golden Crown Challenge](https://www.geektrust.
 
 To run this project:
 
-(absolute_path_to_input_file is the messages file with destination kingdom and message linewise, sender_kingdom is an opitonal argument specifying the sender kingdom)
-
 ```
 $ python -m geektrust <absolute_path_to_input_file> [sender_kingdom]
 ```
+(absolute_path_to_input_file is the messages file with destination kingdom and message linewise, sender_kingdom is an opitonal argument specifying the sender kingdom)
+
 
 To run tests:
 
