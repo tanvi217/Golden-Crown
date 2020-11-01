@@ -1,3 +1,5 @@
+
+import pathlib
 import sys
 
 from src.main.models.cover import Cover
@@ -7,7 +9,7 @@ from src.main.controller.kingdom_to_emblem import get_emblem
 class SenderKingdom(Kingdom):
 
     def __init__(self, realm, messages_file_path):
-        super().__init__(realm, get_emblem(realm))
+        super().__init__(realm)
         self.messages_file_path = messages_file_path
         self.allies = list()
 
@@ -16,14 +18,10 @@ class SenderKingdom(Kingdom):
             self.allies.append(ally)
 
     def send_messages(self):
-        try:
+        is_file = pathlib.Path(self.messages_file_path).exists()
+
+        if is_file:
             input_file = open(self.messages_file_path, 'r')
-
-        except OSError:
-            print("Could not read file - ", messages_file_path)
-            sys.exit()
-
-        with input_file:
             for line in input_file:
                 try:
                     destination_kingdom, secret_message = line.split(" ", 1)
@@ -34,12 +32,14 @@ class SenderKingdom(Kingdom):
 
             input_file.close() 
 
+        else:
+            raise FileNotFoundError("Could not read file - {}".format(self.messages_file_path))
+
     def send_message(self, secret_message, destination_kingdom):
-        try:
-            destination_emblem = get_emblem(destination_kingdom)
+        destination_emblem = get_emblem(destination_kingdom)
+        if destination_emblem:
             cover = Cover(secret_message, destination_emblem)
             if cover.is_destination_emblem_in_message():
                 self.__add_ally(destination_kingdom)
-
-        except KeyError:
+        else:
             print("{} kingdom does not exist.".format(destination_kingdom))
